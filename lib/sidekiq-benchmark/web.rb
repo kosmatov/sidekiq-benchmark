@@ -5,7 +5,7 @@ module Sidekiq
   module Benchmark
     module Web
       def self.registered(app)
-        web_dir = File.expand_path("../../../../web", __FILE__)
+        web_dir = File.expand_path("../../../web", __FILE__)
         js_dir = File.join(web_dir, "assets", "javascripts")
 
         app.helpers Chartkick::Helper
