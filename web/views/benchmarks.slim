@@ -1,0 +1,18 @@
+script src="//www.google.com/jsapi"
+==js :chartkick
+
+header.row
+  .span5
+    h3 Benchmarks
+
+section
+  - @types.each do |type|
+    section
+      h4= type
+      figure.row
+        .span5
+          h5 Count jobs by execution time
+          == column_chart @charts[type][:stats]
+        .span4
+          h5 Average execution time
+          == pie_chart @charts[type][:total]
