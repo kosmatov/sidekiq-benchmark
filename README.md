@@ -41,6 +41,7 @@ class SampleWorker
   end
 
 end
+```
 
 ## Contributing
 
