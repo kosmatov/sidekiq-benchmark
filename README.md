@@ -16,6 +16,10 @@ Or install it yourself as:
 
     $ gem install sidekiq-benchmark
 
+## Requirements
+
+Redis 2.6.0 or newer required
+
 ## Usage
 
 ```ruby
