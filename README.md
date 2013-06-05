@@ -43,6 +43,8 @@ class SampleWorker
 
 end
 ```
+## Web UI
+![Web UI](https://github.com/kosmatov/sidekiq-benchmark/raw/master/examples/web-ui.png)
 
 ## Contributing
 
