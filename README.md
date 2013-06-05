@@ -6,15 +6,16 @@ Adds benchmarking methods to Sidekiq workers, keeps metrics and adds tab to Web 
 
 Add this line to your application's Gemfile:
 
-    gem 'sidekiq-benchmark'
+    gem 'sidekiq-benchmark', github: 'kosmatov/sidekiq-benchmark'
+    gem 'sinatra-assetpack', github: 'kosmatov/sinatra-assetpack'
+    gem 'chartkick', github: 'kosmatov/chartkick'
+
+*Pull requests was sent to related projects.*
+*Rubygems release is coming soon...*
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install sidekiq-benchmark
 
 ## Requirements
 
