@@ -28,7 +28,7 @@ class SampleWorker
   include Sidekiq::Benchmark::Worker
 
   def perform(id)
-    benchmark id do |bm|
+    benchmark do |bm|
       bm.some_metric do
         100500.times do
         end
