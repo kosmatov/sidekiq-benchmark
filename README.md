@@ -1,6 +1,6 @@
 # Sidekiq::Benchmark
-
-TODO: Write a gem description
+ 
+Adds benchmarking methods to Sidekiq workers, keeps metrics and adds tab to Web UI to let you browse them.
 
 ## Installation
 
@@ -18,7 +18,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class SampleWorker
+  include Sidekiq::Worker
+  include Sidekiq::Benchmark::Worker
+
+  def perform(id)
+    benchmark id do |bm|
+      bm.some_metric do
+        100500.times do
+        end
+      end
+
+      bm.other_metric do
+        something_code
+      end
+    end
+  end
+
+end
 
 ## Contributing
 
