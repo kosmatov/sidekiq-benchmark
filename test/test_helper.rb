@@ -21,12 +21,8 @@ module Sidekiq
 
         attr_reader :bm_obj, :metric_names
 
-        def self.id
-          @id = @id.to_i + 1
-        end
-
         def initialize
-          @bm_obj = benchmark(self.class.id) do |bm|
+          @bm_obj = benchmark do |bm|
             bm.test_metric do
               2.times do |i|
                 bm.send("nested_test_metric_#{i}") do

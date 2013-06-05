@@ -2,13 +2,13 @@ module Sidekiq
   module Benchmark
     module Worker
 
-      def benchmark(id, options = {})
+      def benchmark(options = {})
         bm = Benchmark.new Time.now
 
         yield(bm)
 
         bm.finish_time = Time.now
-        bm.save id, benchmark_redis_base_key, options
+        bm.save benchmark_redis_base_key, options
 
         bm.set_redis_key benchmark_redis_type_key
         bm
@@ -56,15 +56,16 @@ module Sidekiq
           end
         end
 
-        def save(id, redis_base_key, options = {})
-          options.merge! id: id.to_i, start_time: start_time, finish_time: finish_time
+        def save(redis_base_key, options = {})
+          options.merge! start_time: start_time, finish_time: finish_time
           options.merge! @metrics
 
           job_time_key = @metrics[:job_time].round(1)
 
           Sidekiq.redis do |conn|
             conn.multi do
-              conn.lpush "#{redis_base_key}:jobs", Sidekiq.dump_json(options)
+              # Isn't usefull at this moment
+              #conn.lpush "#{redis_base_key}:jobs", Sidekiq.dump_json(options)
 
               @metrics.each do |key, value|
                 conn.hincrbyfloat "#{redis_base_key}:total", key, value
