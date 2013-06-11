@@ -37,7 +37,7 @@ module Sidekiq
 
               stats = conn.hgetall "benchmark:#{type}:stats"
               stats.each do |key, value|
-                @charts[type][:stats] << [key.to_f * 1000, value.to_i]
+                @charts[type][:stats] << [key.to_f, value.to_i]
               end
             end
           end
