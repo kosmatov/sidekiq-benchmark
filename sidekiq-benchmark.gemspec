@@ -17,8 +17,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency "chartkick"
-  gem.add_dependency "sinatra-assetpack"
+  gem.add_dependency "chartkick", '>= 1.1.1'
+  gem.add_dependency "sinatra-assetpack", '>= 0.2.5'
 
   gem.add_development_dependency "sidekiq"
   gem.add_development_dependency "slim"
