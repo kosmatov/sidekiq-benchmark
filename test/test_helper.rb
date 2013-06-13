@@ -36,6 +36,8 @@ module Sidekiq
                 end
               end
             end
+
+            bm.assigned_metric = 0.1
           end
 
           @metric_names = [:test_metric, :nested_test_metric_1, :job_time]

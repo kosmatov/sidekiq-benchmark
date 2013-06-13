@@ -21,6 +21,7 @@ module Sidekiq
 
           assert @worker.bm_obj.start_time
           assert @worker.bm_obj.finish_time
+          assert @worker.bm_obj.assigned_metric
         end
 
         it "should save metrics to redis" do
