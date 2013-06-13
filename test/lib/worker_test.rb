@@ -16,21 +16,21 @@ module Sidekiq
           metrics = @worker.bm_obj.metrics
 
           @worker.metric_names.each do |metric_name|
-            assert metrics[metric_name]
+            metrics[metric_name].wont_be_nil
           end
 
-          assert @worker.bm_obj.start_time
-          assert @worker.bm_obj.finish_time
-          assert @worker.bm_obj.assigned_metric
+          @worker.bm_obj.start_time.wont_be_nil
+          @worker.bm_obj.finish_time.wont_be_nil
+          metrics[:assigned_metric].must_equal @worker.assigned_metric
         end
 
         it "should save metrics to redis" do
           Sidekiq.redis do |conn|
             total_time = conn.hget("#{@worker.benchmark_redis_base_key}:total", :job_time)
-            assert total_time, "Total time: #{total_time.inspect}"
+            total_time.wont_be_nil
 
             metrics = conn.hkeys("#{@worker.benchmark_redis_base_key}:stats")
-            assert metrics.any?, "Metrics: #{metrics.inspect}"
+            metrics.wont_be_empty
           end
         end
       end
