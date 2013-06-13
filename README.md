@@ -6,7 +6,8 @@ Version](https://badge.fury.io/rb/sidekiq-benchmark.png)](https://rubygems.org/g
 [![Coverage
 Status](https://coveralls.io/repos/kosmatov/sidekiq-benchmark/badge.png?branch=master)](https://coveralls.io/r/kosmatov/sidekiq-benchmark)
 
-Adds benchmarking methods to Sidekiq workers, keeps metrics and adds tab to Web UI to let you browse them.
+Adds benchmarking methods to
+[Sidekiq](https://github.com/mperham/sidekiq) workers, keeps metrics and adds tab to Web UI to let you browse them.
 
 ## Installation
 
