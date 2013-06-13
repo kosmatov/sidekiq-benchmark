@@ -1,3 +1,8 @@
+require 'coveralls'
+Coveralls.wear! do
+  add_filter '/test/'
+end
+
 require 'minitest/pride'
 
 require 'bundler/setup'
