@@ -71,7 +71,7 @@ end
 
 ### Sample Apps
 
-![Heroku App](http://sidekiq-benchmark.herokuapp.com)
+[Heroku App](http://sidekiq-benchmark.herokuapp.com)
 
 ## Contributing
 
