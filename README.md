@@ -31,6 +31,23 @@ class SampleWorker
   include Sidekiq::Benchmark::Worker
 
   def perform(id)
+    benchmark.first_metric do
+      100500.times do something end
+    end
+
+    benchmark.second_metric do
+      42.times do anything end
+    end
+
+    benchmark.finish
+  end
+end
+
+class OtherSampleWorker
+  include Sidekiq::Worker
+  include Sidekiq::Benchmark::Worker
+
+  def perform(id)
     benchmark do |bm|
       bm.some_metric do
         100500.times do
@@ -41,12 +58,20 @@ class SampleWorker
         something_code
       end
     end
+    # if block given, yield and finish
   end
 
 end
 ```
-## Web UI
+## Examples
+
+### Web UI
+
 ![Web UI](https://github.com/kosmatov/sidekiq-benchmark/raw/master/examples/web-ui.png)
+
+### Sample Apps
+
+![Heroku App](http://sidekiq-benchmark.herokuapp.com)
 
 ## Contributing
 
