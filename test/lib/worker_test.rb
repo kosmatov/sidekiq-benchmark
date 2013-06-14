@@ -26,10 +26,10 @@ module Sidekiq
 
         it "should save metrics to redis" do
           Sidekiq.redis do |conn|
-            total_time = conn.hget("#{@worker.benchmark_redis_base_key}:total", :job_time)
+            total_time = conn.hget("#{@worker.benchmark.redis_key}:total", :job_time)
             total_time.wont_be_nil
 
-            metrics = conn.hkeys("#{@worker.benchmark_redis_base_key}:stats")
+            metrics = conn.hkeys("#{@worker.benchmark.redis_key}:stats")
             metrics.wont_be_empty
           end
         end

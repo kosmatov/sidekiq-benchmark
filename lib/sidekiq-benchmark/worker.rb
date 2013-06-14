@@ -3,36 +3,38 @@ module Sidekiq
     module Worker
 
       def benchmark(options = {})
-        bm = Benchmark.new Time.now
+        @benchmark ||= Benchmark.new Time.now, benchmark_redis_type_key, options
 
-        yield(bm)
+        if block_given?
+          yield @benchmark
+          @benchmark.finish
+        end
 
-        bm.finish_time = Time.now
-        bm.save benchmark_redis_base_key, options
-
-        bm.set_redis_key benchmark_redis_type_key
-        bm
+        @benchmark
       end
 
       def benchmark_redis_type_key
         @benchmark_redis_type_key ||= self.class.name.gsub('::', '_').downcase
       end
 
-      def benchmark_redis_base_key
-        @benchmark_redis_base_key ||= "benchmark:#{benchmark_redis_type_key}"
-      end
-
       class Benchmark
-        attr_reader :metrics, :start_time, :finish_time
+        REDIS_NAMESPACE = :benchmark
 
-        def initialize(start_time)
+        attr_reader :metrics, :start_time, :finish_time, :redis_key
+
+        def initialize(start_time, redis_key, options)
           @metrics = {}
+          @options = options
           @start_time = start_time.to_f
+
+          @redis_key = "#{REDIS_NAMESPACE}:#{redis_key}"
+          set_redis_key redis_key
         end
 
-        def finish_time=(value)
-          @finish_time = value.to_f
+        def finish
+          @finish_time = Time.now.to_f
           @metrics[:job_time] = @finish_time - start_time
+          save
         end
 
         def method_missing(name, *args)
@@ -52,29 +54,24 @@ module Sidekiq
 
         def set_redis_key(key)
           Sidekiq.redis do |conn|
-            conn.sadd "benchmark:types", key
+            conn.sadd "#{REDIS_NAMESPACE}:types", key
           end
         end
 
-        def save(redis_base_key, options = {})
-          options.merge! start_time: start_time, finish_time: finish_time
-          options.merge! @metrics
-
+        def save
           job_time_key = @metrics[:job_time].round(1)
 
           Sidekiq.redis do |conn|
             conn.multi do
-              # Isn't usefull at this moment
-              #conn.lpush "#{redis_base_key}:jobs", Sidekiq.dump_json(options)
-
               @metrics.each do |key, value|
-                conn.hincrbyfloat "#{redis_base_key}:total", key, value
-                conn.hincrby "#{redis_base_key}:stats", job_time_key, 1
+                conn.hincrbyfloat "#{redis_key}:total", key, value
               end
 
-              conn.hsetnx "#{redis_base_key}:total", "start_time", start_time
-              conn.hincrbyfloat "#{redis_base_key}:total", "job_time", @metrics[:job_time]
-              conn.hset "#{redis_base_key}:total", "finish_time", finish_time
+              conn.hincrby "#{redis_key}:stats", job_time_key, 1
+
+              conn.hsetnx "#{redis_key}:total", "start_time", start_time
+              conn.hincrbyfloat "#{redis_key}:total", "job_time", @metrics[:job_time]
+              conn.hset "#{redis_key}:total", "finish_time", finish_time
             end
           end
         end
