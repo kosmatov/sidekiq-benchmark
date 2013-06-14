@@ -13,14 +13,14 @@ module Sidekiq
         end
 
         it "should collect metrics" do
-          metrics = @worker.bm_obj.metrics
+          metrics = @worker.benchmark.metrics
 
           @worker.metric_names.each do |metric_name|
             metrics[metric_name].wont_be_nil
           end
 
-          @worker.bm_obj.start_time.wont_be_nil
-          @worker.bm_obj.finish_time.wont_be_nil
+          @worker.benchmark.start_time.wont_be_nil
+          @worker.benchmark.finish_time.wont_be_nil
           metrics[:assigned_metric].must_equal @worker.assigned_metric
         end
 
@@ -33,6 +33,32 @@ module Sidekiq
             metrics.wont_be_empty
           end
         end
+
+        it "should collect metrics with alter syntax" do
+          worker = AlterWorkerMock.new
+          metrics = worker.benchmark.metrics
+
+          Sidekiq.redis do |conn|
+            metric_set = conn.hkeys("#{worker.benchmark.redis_key}:stats")
+            metric_set.must_be_empty
+          end
+
+          worker.metric_names.each do |metric_name|
+            metrics[metric_name].wont_be_nil
+          end
+
+          worker.benchmark.finish_time.must_be_nil
+
+          worker.finish
+
+          worker.benchmark.finish_time.wont_be_nil
+
+          Sidekiq.redis do |conn|
+            metric_set = conn.hkeys("#{worker.benchmark.redis_key}:stats")
+            metric_set.wont_be_empty
+          end
+        end
+
       end
     end
   end
