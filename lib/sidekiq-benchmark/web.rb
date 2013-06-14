@@ -39,6 +39,9 @@ module Sidekiq
               stats.each do |key, value|
                 @charts[type][:stats] << [key.to_f, value.to_i]
               end
+
+              @charts[type][:stats].sort! { |a, b| a[0] <=> b[0] }
+              @charts[type][:stats].map! { |a| [a[0].to_s, a[1]] }
             end
           end
 

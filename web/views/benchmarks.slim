@@ -11,8 +11,9 @@ section
       h4= type
       figure.row
         .span5
-          h5 Count jobs by execution time
-          == column_chart @charts[type][:stats]
+          h5 Amount of tasks by execution time
+          == column_chart @charts[type][:stats],
+            library: { hAxis: { title: "Execution time" }, vAxis: { title: "Tasks" } }
         .span4
           h5 Average execution time
           == pie_chart @charts[type][:total]
