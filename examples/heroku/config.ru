@@ -1,2 +1,2 @@
-require './web'
+require './app'
 run Sidekiq::Web
