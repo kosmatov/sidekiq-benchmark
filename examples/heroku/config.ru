@@ -1,4 +1,2 @@
-require 'sidekiq'
-require 'sidekiq-benchmark'
-
+require './web'
 run Sidekiq::Web
