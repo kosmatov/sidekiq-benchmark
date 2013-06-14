@@ -5,10 +5,12 @@ require './app/web'
 
 Sidekiq::Web.register Sidekiq::Benchmark::Sample
 
+REDIS_CONFIG = { namespace: :sample }
+
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: :sample }
+  config.redis = REDIS_CONFIG
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: :sample }
+  config.redis = REDIS_CONFIG
 end
