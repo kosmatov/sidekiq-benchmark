@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency "sinatra-assetpack", '>= 0.2.5'
 
   gem.add_development_dependency "sidekiq"
-  gem.add_development_dependency "slim"
   gem.add_development_dependency "sinatra"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rack-test"

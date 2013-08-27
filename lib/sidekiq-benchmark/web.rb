@@ -45,9 +45,9 @@ module Sidekiq
             end
           end
 
-          view_path = File.join(web_dir, "views", "benchmarks.slim")
+          view_path = File.join(web_dir, "views", "benchmarks.erb")
           template = File.read view_path
-          render :slim, template
+          render :erb, template
         end
 
         app.post "/benchmarks/remove" do
