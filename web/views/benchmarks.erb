@@ -11,13 +11,13 @@
 <% @types.each do |type| %>
   <h4><%= type %></h4>
   <figure class="row">
-    <div class="span5">
+    <div class="span6">
       <h5>Amount of tasks by execution time</h5>
       <%= column_chart @charts[type][:stats], library: { hAxis: { title: "Execution time" }, vAxis: { title: "Tasks" } } %>
-      <div class="span4">
-        <h5>Average execution time</h5>
-        <%= pie_chart @charts[type][:total] %>
-      </div>
+    </div>
+    <div class="span5">
+      <h5>Average execution time</h5>
+      <%= pie_chart @charts[type][:total] %>
     </div>
   </figure>
 <% end %>
