@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Benchmarks for Sidekiq}
   gem.summary       = %q{Adds benchmarking methods to Sidekiq workers, keeps metrics and adds tab to Web UI to let you browse them.}
   gem.homepage      = "https://github.com/kosmatov/sidekiq-benchmark/"
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files | grep -Ev '^(examples)'`.split("\n")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
