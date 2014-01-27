@@ -13,7 +13,7 @@
   <figure class="row">
     <div class="col-md-7">
       <h5>Amount of tasks by execution time</h5>
-      <%= column_chart @charts[type][:stats], library: { hAxis: { title: "Execution time" }, vAxis: { title: "Tasks" } } %>
+      <%= column_chart @charts[type][:stats], library: { hAxis: { title: "Execution time (s)" }, vAxis: { title: "Tasks" } } %>
     </div>
     <div class="col-md-5">
       <h5>Average execution time</h5>
