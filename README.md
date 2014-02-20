@@ -75,7 +75,7 @@ end
 
 When you use [Sidekiq::Testing](https://github.com/mperham/sidekiq/wiki/Testing) you
 must load `sidekiq-benchmark/testing` to stop saving benchmark data to redis.
-Just add next code in your test or spec helper:
+Just add next code to your test or spec helper:
 
 ```ruby
 require 'sidekiq-benchmark/testing'
