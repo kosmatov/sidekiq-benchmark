@@ -14,5 +14,9 @@ class Sidekiq::Benchmark::TestingTest < Minitest::Spec
         total_time.must_be_nil
       end
     end
+
+    it "run code in bm blocks" do
+      @worker.counter.wont_equal 0
+    end
   end
 end

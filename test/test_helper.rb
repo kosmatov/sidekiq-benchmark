@@ -25,16 +25,18 @@ module Sidekiq
         include Sidekiq::Worker
         include Sidekiq::Benchmark::Worker
 
-        attr_reader :bm_obj, :metric_names, :assigned_metric
+        attr_reader :bm_obj, :metric_names, :assigned_metric, :counter
 
         def initialize
           @assigned_metric = 0.1
+          @counter = 0
 
           benchmark do |bm|
             bm.test_metric do
               2.times do |i|
                 bm.send("nested_test_metric_#{i}") do
-                  100500.times do |i|
+                  100500.times do |j|
+                    @counter += 1
                   end
                 end
               end
