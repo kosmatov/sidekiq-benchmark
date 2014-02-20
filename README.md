@@ -73,7 +73,7 @@ end
 
 ## Testing sidekiq workers
 
-If you used [Sidekiq::Testing](https://github.com/mperham/sidekiq/wiki/Testing) you
+When you use [Sidekiq::Testing](https://github.com/mperham/sidekiq/wiki/Testing) you
 must load `sidekiq-benchmark/testing` to stop saving benchmark data to redis.
 Just add next code in your test or spec helper:
 
