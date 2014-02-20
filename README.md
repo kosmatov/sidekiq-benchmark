@@ -71,6 +71,16 @@ end
 
 [Heroku App](http://sidekiq-benchmark.herokuapp.com/benchmarks)
 
+## Testing sidekiq workers
+
+If you used [Sidekiq::Testing](https://github.com/mperham/sidekiq/wiki/Testing) you
+must load `sidekiq-benchmark/testing` to stop saving benchmark data to redis.
+Just add next code in your test or spec helper:
+
+```ruby
+require 'sidekiq-benchmark/testing'
+```
+
 ## Contributing
 
 1. Fork it
