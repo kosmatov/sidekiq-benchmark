@@ -59,6 +59,14 @@ module Sidekiq
           end
         end
 
+        it "should allow benchmark methods" do
+          worker = AlterWorkerMock.new
+          value  = worker.benchmark.call(:multiply, 4, 4)
+
+          value.must_equal 16
+          worker.benchmark.metrics[:multiply].wont_be_nil
+        end
+
       end
     end
   end
