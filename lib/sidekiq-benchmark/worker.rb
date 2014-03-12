@@ -37,19 +37,31 @@ module Sidekiq
           save
         end
 
-        def method_missing(name, *args)
+        def measure(name)
+          t0  = Time.now
+          ret = yield
+
+          self[name] = Time.now - t0
+
+          ret
+        end
+        alias_method :bm, :measure
+
+        def []=(name, value)
+          @metrics[name] = value.to_f
+        end
+
+        def [](name)
+          @metrics[name]
+        end
+
+        def method_missing(name, *args, &block)
           if block_given?
-            start_time = Time.now
-
-            yield
-
-            finish_time = Time.now
-            value = finish_time.to_f - start_time.to_f
+            measure(name, &block)
+            self[name]
           else
-            value = args[0].to_f
+            self[name] = args[0]
           end
-
-          @metrics[name] = value
         end
 
         def set_redis_key(key)
