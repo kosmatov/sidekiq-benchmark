@@ -87,7 +87,6 @@ module Sidekiq
               conn.hincrby "#{redis_key}:stats", job_time_key, 1
 
               conn.hsetnx "#{redis_key}:total", "start_time", start_time
-              conn.hincrbyfloat "#{redis_key}:total", "job_time", @metrics[:job_time]
               conn.hset "#{redis_key}:total", "finish_time", finish_time
             end
           end
