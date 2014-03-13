@@ -3,7 +3,7 @@ module Sidekiq
     module Worker
 
       def benchmark(options = {})
-        @benchmark ||= Benchmark.new Time.now, benchmark_redis_type_key, options
+        @benchmark ||= Benchmark.new self, benchmark_redis_type_key, options
 
         if block_given?
           yield @benchmark
@@ -22,34 +22,51 @@ module Sidekiq
 
         attr_reader :metrics, :start_time, :finish_time, :redis_key
 
-        def initialize(start_time, redis_key, options)
+        def initialize(worker, redis_key, options)
           @metrics = {}
+          @worker = worker
           @options = options
-          @start_time = start_time.to_f
+          @start_time = Time.now
 
           @redis_key = "#{REDIS_NAMESPACE}:#{redis_key}"
           set_redis_key redis_key
         end
 
         def finish
-          @finish_time = Time.now.to_f
-          @metrics[:job_time] = @finish_time - start_time
+          @finish_time = Time.now
+          self[:job_time] = finish_time - start_time
           save
         end
 
-        def method_missing(name, *args)
+        def measure(name)
+          t0  = Time.now
+          ret = yield
+
+          self[name] = Time.now - t0
+
+          ret
+        end
+        alias_method :bm, :measure
+
+        def call(name, *args)
+          measure(name) { @worker.send(name, *args) }
+        end
+
+        def []=(name, value)
+          @metrics[name] = value.to_f
+        end
+
+        def [](name)
+          @metrics[name]
+        end
+
+        def method_missing(name, *args, &block)
           if block_given?
-            start_time = Time.now
-
-            yield
-
-            finish_time = Time.now
-            value = finish_time.to_f - start_time.to_f
+            measure(name, &block)
+            self[name]
           else
-            value = args[0].to_f
+            self[name] = args[0]
           end
-
-          @metrics[name] = value
         end
 
         def set_redis_key(key)

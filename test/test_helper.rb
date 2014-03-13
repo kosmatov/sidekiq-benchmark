@@ -64,6 +64,10 @@ module Sidekiq
           @metric_names = [:test_metric, :other_metric]
         end
 
+        def multiply(a, b)
+          a * b
+        end
+
         def finish
           benchmark.finish
         end
