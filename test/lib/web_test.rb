@@ -23,7 +23,7 @@ module Sidekiq
           WorkerMock.new
 
           get '/benchmarks'
-          last_response.status.must_equal 200, last_response.body
+          last_response.status.must_equal 200
         end
 
         it "should remove benchmarks data" do
