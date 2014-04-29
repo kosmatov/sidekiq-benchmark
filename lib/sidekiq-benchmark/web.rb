@@ -13,8 +13,6 @@ module Sidekiq
 
         app.assets {
           serve '/js', from: js_dir
-
-          js 'chartkick', ['/js/chartkick.js']
         }
 
         app.get "/benchmarks" do
