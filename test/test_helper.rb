@@ -72,6 +72,20 @@ module Sidekiq
         end
       end
 
+      class ContinuingWorkerMock < WorkerMock
+        def initialize
+          benchmark do |bm|
+            bm.continued_metric do
+              Delorean.jump 1
+            end
+
+            bm.continued_metric do
+              Delorean.jump 1
+            end
+          end
+        end
+      end
+
       def self.flush_db
         Sidekiq.redis = REDIS
         Sidekiq.redis do |conn|

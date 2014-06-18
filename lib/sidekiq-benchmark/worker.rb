@@ -41,8 +41,10 @@ module Sidekiq
         def measure(name)
           t0  = Time.now
           ret = yield
+          t1  = Time.now
 
-          self[name] = Time.now - t0
+          self[name] ||= 0.0
+          self[name] += t1 - t0
 
           ret
         end
