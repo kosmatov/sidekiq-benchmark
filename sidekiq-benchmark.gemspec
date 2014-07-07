@@ -27,4 +27,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rack-test"
   gem.add_development_dependency "minitest", "~> 5"
   gem.add_development_dependency "coveralls"
+  gem.add_development_dependency 'delorean', '~> 2.1'
 end

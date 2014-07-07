@@ -13,6 +13,8 @@ require 'sidekiq'
 require 'sidekiq/util'
 require 'sidekiq-benchmark'
 
+require 'delorean'
+
 REDIS = Sidekiq::RedisConnection.create url: "redis://localhost/15", namespace: "testy"
 
 Bundler.require
@@ -35,9 +37,8 @@ module Sidekiq
             bm.test_metric do
               2.times do |i|
                 bm.send("nested_test_metric_#{i}") do
-                  100500.times do |j|
-                    @counter += 1
-                  end
+                  Delorean.jump 1
+                  @counter += 100500
                 end
               end
             end
@@ -52,13 +53,11 @@ module Sidekiq
       class AlterWorkerMock < WorkerMock
         def initialize
           benchmark.test_metric do
-            42.times do
-            end
+            Delorean.jump 1
           end
 
           benchmark.other_metric do
-            100500.times do
-            end
+            Delorean.jump 1
           end
 
           @metric_names = [:test_metric, :other_metric]
@@ -70,6 +69,20 @@ module Sidekiq
 
         def finish
           benchmark.finish
+        end
+      end
+
+      class ContinuingWorkerMock < WorkerMock
+        def initialize
+          benchmark do |bm|
+            bm.continued_metric do
+              Delorean.jump 1
+            end
+
+            bm.continued_metric do
+              Delorean.jump 1
+            end
+          end
         end
       end
 

@@ -55,6 +55,10 @@ class OtherSampleWorker
       bm.other_metric do
         something_code
       end
+
+      bm.some_metric do
+        # some_metric measure continues
+      end
     end
     # if block given, yield and finish
   end

@@ -24,6 +24,13 @@ module Sidekiq
           metrics[:assigned_metric].must_equal @worker.assigned_metric
         end
 
+        it 'should add up metrics' do
+          worker = ContinuingWorkerMock.new
+          metrics = worker.benchmark.metrics
+
+          assert_in_delta metrics[:continued_metric], 2, 0.2
+        end
+
         it "should save metrics to redis" do
           Sidekiq.redis do |conn|
             total_time = conn.hget("#{@worker.benchmark.redis_key}:total", :job_time)
