@@ -46,7 +46,7 @@ module Sidekiq
           self[name] ||= 0.0
           self[name] += t1 - t0
           
-          Sidekiq.logger.info "Benchmark #{name}: #{t1 - t0} sec." if options[:log]
+          Sidekiq.logger.info "Benchmark #{name}: #{t1 - t0} sec." if @options[:log]
 
           ret
         end
