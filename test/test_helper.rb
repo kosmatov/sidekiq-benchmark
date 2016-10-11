@@ -6,6 +6,8 @@ Coveralls.wear! do
   add_filter '/test/'
 end
 
+ENV['RACK_ENV'] = 'test'
+
 require 'bundler/setup'
 require 'rack/test'
 
@@ -14,9 +16,9 @@ require 'sidekiq/util'
 require 'sidekiq-benchmark'
 
 require 'delorean'
+require 'pry'
 
-REDIS = Sidekiq::RedisConnection.create url: "redis://localhost/15", namespace: "testy"
-
+REDIS = Sidekiq::RedisConnection.create url: "redis://localhost/15"
 Bundler.require
 
 module Sidekiq

@@ -33,10 +33,10 @@ module Sidekiq
 
         it "should save metrics to redis" do
           Sidekiq.redis do |conn|
-            total_time = conn.hget("#{@worker.benchmark.redis_key}:total", :job_time)
+            total_time = conn.hget(@worker.benchmark.redis_keys[:total], :job_time)
             total_time.wont_be_nil
 
-            metrics = conn.hkeys("#{@worker.benchmark.redis_key}:stats")
+            metrics = conn.hkeys(@worker.benchmark.redis_keys[:stats])
             metrics.wont_be_empty
           end
         end
@@ -46,7 +46,7 @@ module Sidekiq
           metrics = worker.benchmark.metrics
 
           Sidekiq.redis do |conn|
-            metric_set = conn.hkeys("#{worker.benchmark.redis_key}:stats")
+            metric_set = conn.hkeys(worker.benchmark.redis_keys[:stats])
             metric_set.must_be_empty
           end
 
@@ -55,13 +55,11 @@ module Sidekiq
           end
 
           worker.benchmark.finish_time.must_be_nil
-
           worker.finish
-
           worker.benchmark.finish_time.wont_be_nil
 
           Sidekiq.redis do |conn|
-            metric_set = conn.hkeys("#{worker.benchmark.redis_key}:stats")
+            metric_set = conn.hkeys(worker.benchmark.redis_keys[:stats])
             metric_set.wont_be_empty
           end
         end

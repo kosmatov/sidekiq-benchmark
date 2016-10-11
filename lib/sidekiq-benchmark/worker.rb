@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Sidekiq
   module Benchmark
     module Worker
-
       def benchmark(options = {})
         @benchmark ||= Benchmark.new self, benchmark_redis_type_key, options
 
@@ -18,9 +19,7 @@ module Sidekiq
       end
 
       class Benchmark
-        REDIS_NAMESPACE = :benchmark
-
-        attr_reader :metrics, :start_time, :finish_time, :redis_key
+        attr_reader :metrics, :start_time, :finish_time, :redis_keys
 
         def initialize(worker, redis_key, options)
           @metrics = {}
@@ -28,7 +27,12 @@ module Sidekiq
           @options = options
           @start_time = Time.now
 
-          @redis_key = "#{REDIS_NAMESPACE}:#{redis_key}"
+          @redis_keys =
+            %i[total stats].reduce({}) do |m, e|
+              m[e] = "#{REDIS_NAMESPACE}:#{redis_key}:#{e}"
+              m
+            end
+
           set_redis_key redis_key
         end
 
@@ -62,18 +66,10 @@ module Sidekiq
           @metrics[name]
         end
 
-        def method_missing(name, *args, &block)
-          if block_given?
-            measure(name, &block)
-            self[name]
-          else
-            self[name] = args[0]
-          end
-        end
-
         def set_redis_key(key)
           Sidekiq.redis do |conn|
-            conn.sadd "#{REDIS_NAMESPACE}:types", key
+            conn.sadd Sidekiq::Benchmark::TYPES_KEY, key
+            conn.expire Sidekiq::Benchmark::TYPES_KEY, REDIS_KEYS_TTL
           end
         end
 
@@ -83,14 +79,26 @@ module Sidekiq
           Sidekiq.redis do |conn|
             conn.multi do
               @metrics.each do |key, value|
-                conn.hincrbyfloat "#{redis_key}:total", key, value
+                conn.hincrbyfloat redis_keys[:total], key, value
               end
 
-              conn.hincrby "#{redis_key}:stats", job_time_key, 1
+              conn.hincrby redis_keys[:stats], job_time_key, 1
 
-              conn.hsetnx "#{redis_key}:total", "start_time", start_time
-              conn.hset "#{redis_key}:total", "finish_time", finish_time
+              conn.hsetnx redis_keys[:total], "start_time", start_time
+              conn.hset redis_keys[:total], "finish_time", finish_time
+
+              conn.expire redis_keys[:stats], REDIS_KEYS_TTL
+              conn.expire redis_keys[:total], REDIS_KEYS_TTL
             end
+          end
+        end
+
+        def method_missing(name, *args, &block)
+          if block_given?
+            measure(name, &block)
+            self[name]
+          else
+            self[name] = args[0]
           end
         end
 

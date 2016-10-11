@@ -1,7 +1,8 @@
 require 'test_helper'
-require 'sidekiq-benchmark/testing'
 
 class Sidekiq::Benchmark::TestingTest < Minitest::Spec
+  require 'sidekiq-benchmark/testing'
+
   describe 'Testing' do
     before do
       Sidekiq::Benchmark::Test.flush_db
@@ -10,7 +11,7 @@ class Sidekiq::Benchmark::TestingTest < Minitest::Spec
 
     it "save nothing to redis" do
       Sidekiq.redis do |conn|
-        total_time = conn.hget("#{@worker.benchmark.redis_key}:total", :job_time)
+        total_time = conn.hget(@worker.benchmark.redis_keys[:total], :job_time)
         total_time.must_be_nil
       end
     end

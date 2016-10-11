@@ -19,13 +19,12 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "chartkick", '>= 1.1.1'
-  gem.add_dependency "sinatra-assetpack", '>= 0.2.5'
 
   gem.add_development_dependency "sidekiq"
-  gem.add_development_dependency "sinatra"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rack-test"
   gem.add_development_dependency "minitest", "~> 5"
   gem.add_development_dependency "coveralls"
+  gem.add_development_dependency "pry"
   gem.add_development_dependency 'delorean', '~> 2.1'
 end
