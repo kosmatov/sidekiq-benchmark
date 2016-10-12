@@ -19,7 +19,7 @@ And then execute:
 
 ## Requirements
 
-Redis 2.6.0 or newer required
+From version 0.5.0 works with Sidekiq 4.2 or newer
 
 ## Usage
 
@@ -92,6 +92,3 @@ require 'sidekiq-benchmark/testing'
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-
-[![endorse](https://api.coderwall.com/kosmatov/endorsecount.png)](https://coderwall.com/kosmatov)
