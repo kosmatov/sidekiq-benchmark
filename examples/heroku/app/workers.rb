@@ -1,7 +1,6 @@
 module Sidekiq
   module Benchmark
     module Sample
-
       class Worker
         include Sidekiq::Worker
         include Sidekiq::Benchmark::Worker
@@ -28,9 +27,9 @@ module Sidekiq
             end
           end
         end
-
       end
 
+      OtherWorker = Class.new Worker
     end
   end
 end

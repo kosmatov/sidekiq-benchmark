@@ -8,6 +8,7 @@ module Sidekiq
   module Benchmark
     REDIS_NAMESPACE = :benchmark
     TYPES_KEY = "#{REDIS_NAMESPACE}:types".freeze
+    STAT_KEYS = %i[stats total]
     REDIS_KEYS_TTL = 3600 * 24 * 30
 
     autoload :Worker, 'sidekiq-benchmark/worker'

@@ -68,8 +68,8 @@ module Sidekiq
 
         def set_redis_key(key)
           Sidekiq.redis do |conn|
-            conn.sadd Sidekiq::Benchmark::TYPES_KEY, key
-            conn.expire Sidekiq::Benchmark::TYPES_KEY, REDIS_KEYS_TTL
+            conn.sadd TYPES_KEY, key
+            conn.expire TYPES_KEY, REDIS_KEYS_TTL
           end
         end
 

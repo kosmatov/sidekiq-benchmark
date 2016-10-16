@@ -14,33 +14,38 @@ module Sidekiq
           Test.flush_db
         end
 
-        it "should display index without stats" do
+        it "display index without stats" do
           get '/benchmarks'
           last_response.status.must_equal 200
         end
 
-        it "should display index with stats" do
+        it "display index with stats" do
           WorkerMock.new
 
           get '/benchmarks'
           last_response.status.must_equal 200
         end
 
-        it "should remove benchmarks data" do
+        it "remove all benchmarks data" do
           WorkerMock.new
 
-          Sidekiq.redis do |conn|
-            keys = conn.keys "benchmark:*"
-            keys.wont_be_empty
-          end
+          Sidekiq.redis { |conn| conn.keys("benchmark:*").wont_be_empty }
 
-          post '/benchmarks/remove'
+          post '/benchmarks/remove_all'
           last_response.status.must_equal 302
 
-          Sidekiq.redis do |conn|
-            keys = conn.keys "benchmark:*"
-            keys.must_be_empty
-          end
+          Sidekiq.redis { |conn| conn.keys("benchmark:*").must_be_empty }
+        end
+
+        it "remove benchmark data" do
+          WorkerMock.new
+
+          Sidekiq.redis { |conn| conn.keys("benchmark:sidekiq_benchmark_test_workermock:*").wont_be_empty }
+
+          post '/benchmarks/remove', type: :sidekiq_benchmark_test_workermock
+          last_response.status.must_equal 302
+
+          Sidekiq.redis { |conn| conn.keys("benchmark:sidekiq_benchmark_test_workermock:*").must_be_empty }
         end
       end
     end

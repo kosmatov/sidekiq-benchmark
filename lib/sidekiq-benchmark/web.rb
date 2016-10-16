@@ -23,11 +23,11 @@ module Sidekiq
           @charts = {}
 
           Sidekiq.redis do |conn|
-            @types = conn.smembers Sidekiq::Benchmark::TYPES_KEY
+            @types = conn.smembers TYPES_KEY
             @types.each do |type|
-              @charts[type] = { total: [], stats: [] }
+              @charts[type] = STAT_KEYS.reduce({}) { |a, e| a[e] = []; a }
 
-              total_key = "#{Sidekiq::Benchmark::REDIS_NAMESPACE}:#{type}:total"
+              total_key = "#{REDIS_NAMESPACE}:#{type}:total"
               total_keys = conn.hkeys(total_key) - %w(start_time job_time finish_time)
 
               total_time = conn.hget total_key, :job_time
@@ -37,7 +37,7 @@ module Sidekiq
                 @charts[type][:total] << [key, value.to_f.round(2)]
               end
 
-              stats = conn.hgetall "#{Sidekiq::Benchmark::REDIS_NAMESPACE}:#{type}:stats"
+              stats = conn.hgetall "#{REDIS_NAMESPACE}:#{type}:stats"
               stats.each do |key, value|
                 @charts[type][:stats] << [key.to_f, value.to_i]
               end
@@ -52,7 +52,20 @@ module Sidekiq
 
         app.post "/benchmarks/remove" do
           Sidekiq.redis do |conn|
-            keys = conn.keys "benchmark:*"
+            keys = STAT_KEYS.map { |key| "#{REDIS_NAMESPACE}:#{params[:type]}:#{key}" }
+            conn.srem TYPES_KEY, params[:type]
+            conn.del keys
+          end
+
+          redirect "#{root_path}benchmarks"
+        end
+        app.post "/benchmarks/remove_all" do
+          Sidekiq.redis do |conn|
+            types = conn.smembers TYPES_KEY
+            keys = STAT_KEYS.map do |key|
+              types.map { |type| "#{REDIS_NAMESPACE}:#{type}:#{key}" }
+            end.flatten
+            keys << TYPES_KEY
             conn.del keys
           end
 

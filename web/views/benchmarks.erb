@@ -5,11 +5,33 @@
   <div class="col-md-6">
     <h3>Benchmarks</h3>
   </div>
+
+  <div class="col-md-6">
+    <form method="POST" class="warning-messages" action="<%= root_path %>benchmarks/remove_all">
+      <%= csrf_tag %>
+      <div class="pull-right">
+        <button class="btn btn-danger" type="submit" name="clear" value="1" data-confirm="<%= t('AreYouSure') %>"><%= t('DeleteAll') %></button>
+      </div>
+    </form>
+  </div>
 </header>
 
-<section>
 <% @types.each do |type| %>
-  <h4><%= type %></h4>
+<section>
+  <div class="row">
+    <div class="col-md-6">
+      <h4><%= type %></h4>
+    </div>
+    <div class="col-md-6">
+      <form method="POST" class="warning-messages" action="<%= root_path %>benchmarks/remove">
+        <%= csrf_tag %>
+        <div class="pull-right">
+          <input type="hidden" name="type" value="<%= type %>"/>
+          <button class="btn btn-danger" type="submit" name="clear" value="1" data-confirm="<%= t('AreYouSure') %>"><%= t('Delete') %></button>
+        </div>
+      </form>
+    </div>
+  </div>
   <figure class="row">
     <div class="col-md-7">
       <h5>Amount of tasks by execution time</h5>
@@ -20,5 +42,5 @@
       <%= pie_chart @charts[type][:total] %>
     </div>
   </figure>
-<% end %>
 </section>
+<% end %>

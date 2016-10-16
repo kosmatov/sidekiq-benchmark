@@ -12,6 +12,7 @@ module Sidekiq
         app.post "/benchmarks/generate" do
           10.times do
             Worker.defer
+            OtherWorker.defer
           end
 
           redirect "#{root_path}benchmarks"
