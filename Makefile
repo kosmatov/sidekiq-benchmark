@@ -1,6 +1,6 @@
 .PHONY: test
 
-DOCKER_CONSOLE := docker-compose run -w /app --rm console
+DOCKER_CONSOLE := docker-compose run -w /app$(APP_PATH) --rm console
 PROJECT_NAME ?= $(shell basename $(shell pwd))
 
 container:
@@ -10,6 +10,9 @@ container:
 bundle bundle_install bundle_update:
 	$(eval bundle_cmd ?= $(shell echo $@ | tr _ ' '))
 	$(DOCKER_CONSOLE) $(bundle_cmd)
+ifndef APP_PATH
+	APP_PATH=/examples/heroku make $@
+endif
 
 build:
 	$(DOCKER_CONSOLE) gem build $(PROJECT_NAME).gemspec
