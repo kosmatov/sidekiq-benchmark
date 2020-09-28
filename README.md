@@ -73,7 +73,7 @@ end
 
 ### Sample Apps
 
-[Heroku App](http://sidekiq-benchmark.herokuapp.com/benchmarks)
+[Heroku App](http://sidekiq-benchmark.herokuapp.com/benchmarks/generate)
 
 ## Testing sidekiq workers
 
