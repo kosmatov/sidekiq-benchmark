@@ -1,0 +1,31 @@
+version: '3.8'
+
+x-logging: &logging
+  options:
+    max-size: '5k'
+    max-file: '5'
+    labels: "{{.Name}}"
+  driver: json-file
+
+services:
+  app: &base
+    image: ruby:latest
+    environment: &app_env
+      - BUNDLE_PATH=/app/vendor
+      - REDIS_HOST=redis
+    volumes:
+      - .:/app:cached
+      - ./vendor:/app/vendor
+      - ~/.pry_history:/root/.pry_history
+      - ~/.bash_history:/root/.bash_history
+    links:
+      - redis:redis
+    logging: *logging
+
+  redis:
+    image: redis:alpine
+    logging: *logging
+
+  console:
+    <<: *base
+    command: bash

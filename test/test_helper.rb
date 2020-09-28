@@ -18,7 +18,7 @@ require 'sidekiq-benchmark'
 require 'delorean'
 require 'pry'
 
-REDIS = Sidekiq::RedisConnection.create url: "redis://localhost/15"
+REDIS = Sidekiq::RedisConnection.create url: "redis://#{ENV['REDIS_HOST'] || 'localhost'}/15"
 Bundler.require
 
 module Sidekiq
