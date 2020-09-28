@@ -16,12 +16,12 @@ module Sidekiq
           metrics = @worker.benchmark.metrics
 
           @worker.metric_names.each do |metric_name|
-            metrics[metric_name].wont_be_nil
+            _(metrics[metric_name]).wont_be_nil
           end
 
-          @worker.benchmark.start_time.wont_be_nil
-          @worker.benchmark.finish_time.wont_be_nil
-          metrics[:assigned_metric].must_equal @worker.assigned_metric
+          _(@worker.benchmark.start_time).wont_be_nil
+          _(@worker.benchmark.finish_time).wont_be_nil
+          _(metrics[:assigned_metric]).must_equal @worker.assigned_metric
         end
 
         it 'should add up metrics' do
@@ -34,10 +34,10 @@ module Sidekiq
         it "should save metrics to redis" do
           Sidekiq.redis do |conn|
             total_time = conn.hget(@worker.benchmark.redis_keys[:total], :job_time)
-            total_time.wont_be_nil
+            _(total_time).wont_be_nil
 
             metrics = conn.hkeys(@worker.benchmark.redis_keys[:stats])
-            metrics.wont_be_empty
+            _(metrics).wont_be_empty
           end
         end
 
@@ -47,20 +47,20 @@ module Sidekiq
 
           Sidekiq.redis do |conn|
             metric_set = conn.hkeys(worker.benchmark.redis_keys[:stats])
-            metric_set.must_be_empty
+            _(metric_set).must_be_empty
           end
 
           worker.metric_names.each do |metric_name|
-            metrics[metric_name].wont_be_nil
+            _(metrics[metric_name]).wont_be_nil
           end
 
-          worker.benchmark.finish_time.must_be_nil
+          _(worker.benchmark.finish_time).must_be_nil
           worker.finish
-          worker.benchmark.finish_time.wont_be_nil
+          _(worker.benchmark.finish_time).wont_be_nil
 
           Sidekiq.redis do |conn|
             metric_set = conn.hkeys(worker.benchmark.redis_keys[:stats])
-            metric_set.wont_be_empty
+            _(metric_set).wont_be_empty
           end
         end
 
@@ -68,8 +68,8 @@ module Sidekiq
           worker = AlterWorkerMock.new
           value  = worker.benchmark.call(:multiply, 4, 4)
 
-          value.must_equal 16
-          worker.benchmark.metrics[:multiply].wont_be_nil
+          _(value).must_equal 16
+          _(worker.benchmark.metrics[:multiply]).wont_be_nil
         end
 
       end
