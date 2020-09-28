@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "chartkick", ">= 1.1.1"
-  gem.add_dependency "sidekiq", "~> 5"
+  gem.add_dependency "sidekiq", "~> 6"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rack-test"
