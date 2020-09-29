@@ -1,9 +1,9 @@
 PATH
   remote: ../..
   specs:
-    sidekiq-benchmark (0.7.0)
+    sidekiq-benchmark (0.7.1)
       chartkick (>= 1.1.1)
-      sidekiq (~> 6)
+      sidekiq (> 5)
 
 GEM
   remote: https://rubygems.org/
