@@ -7,6 +7,7 @@ Coveralls.wear! do
 end
 
 ENV['RACK_ENV'] = 'test'
+$TESTING = true
 
 require 'bundler/setup'
 require 'rack/test'

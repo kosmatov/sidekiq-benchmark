@@ -79,18 +79,18 @@ module Sidekiq
           job_time_key = @metrics[:job_time].round(1)
 
           Sidekiq.redis do |conn|
-            conn.multi do
+            conn.multi do |transaction|
               @metrics.each do |key, value|
-                conn.hincrbyfloat redis_keys[:total], key, value
+                transaction.hincrbyfloat redis_keys[:total], key, value
               end
 
-              conn.hincrby redis_keys[:stats], job_time_key, 1
+              transaction.hincrby redis_keys[:stats], job_time_key, 1
 
-              conn.hsetnx redis_keys[:total], "start_time", start_time
-              conn.hset redis_keys[:total], "finish_time", finish_time
+              transaction.hsetnx redis_keys[:total], "start_time", start_time
+              transaction.hset redis_keys[:total], "finish_time", finish_time
 
-              conn.expire redis_keys[:stats], REDIS_KEYS_TTL
-              conn.expire redis_keys[:total], REDIS_KEYS_TTL
+              transaction.expire redis_keys[:stats], REDIS_KEYS_TTL
+              transaction.expire redis_keys[:total], REDIS_KEYS_TTL
             end
           end
         end

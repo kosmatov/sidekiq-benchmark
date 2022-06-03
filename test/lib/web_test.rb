@@ -3,6 +3,8 @@ require 'test_helper'
 module Sidekiq
   module Benchmark
     module Test
+      TOKEN = SecureRandom.base64(32).freeze
+
       describe "Web extention" do
         include Rack::Test::Methods
 
@@ -11,6 +13,8 @@ module Sidekiq
         end
 
         before do
+          env 'rack.session', { csrf: TOKEN }
+          env 'HTTP_X_CSRF_TOKEN', TOKEN
           Test.flush_db
         end
 
