@@ -10,12 +10,12 @@ permissions:
   contents: read
 
 jobs:
-  container-job:
+  ruby-2:
     runs-on: ubuntu-latest
-    container: ruby:latest
+    container: ruby:2
 
     services:
-      redis:
+      redis: &redis
         image: redis
         options: >-
           --health-cmd "redis-cli ping"
@@ -23,7 +23,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    steps:
+    steps: &steps
       - uses: actions/checkout@v3
       - name: bundle install
         run: bundle install
@@ -31,3 +31,11 @@ jobs:
         run: bundle exec rake test
         env:
           REDIS_HOST: redis
+  latest:
+    runs-on: ubuntu-latest
+    container: ruby:latest
+    services:
+      redis:
+        <<: *redis
+    steps:
+      <<: *steps
