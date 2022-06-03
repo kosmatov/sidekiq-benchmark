@@ -15,7 +15,7 @@ jobs:
     container: ruby:latest
 
     services:
-      redis: &redis
+      redis:
         image: redis
         options: >-
           --health-cmd "redis-cli ping"
@@ -23,7 +23,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    steps: &steps
+    steps:
       - uses: actions/checkout@v3
       - name: bundle install
         run: bundle install
