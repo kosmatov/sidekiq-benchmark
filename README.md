@@ -1,5 +1,6 @@
 # Sidekiq::Benchmark
-[![Gem Version](https://badge.fury.io/rb/sidekiq-benchmark.png)](https://rubygems.org/gems/sidekiq-benchmark)
+[![Gem Version](https://badge.fury.io/rb/sidekiq-benchmark.svg)](https://badge.fury.io/rb/sidekiq-benchmark)
+[![Ruby](https://github.com/kosmatov/sidekiq-benchmark/actions/workflows/ruby.yml/badge.svg)](https://github.com/kosmatov/sidekiq-benchmark/actions/workflows/ruby.yml)
 
 Adds benchmarking methods to
 [Sidekiq](https://github.com/mperham/sidekiq) workers, keeps metrics and adds tab to Web UI to let you browse them.
