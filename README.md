@@ -1,8 +1,5 @@
 # Sidekiq::Benchmark
 [![Gem Version](https://badge.fury.io/rb/sidekiq-benchmark.png)](https://rubygems.org/gems/sidekiq-benchmark)
-[![Code Climate](https://codeclimate.com/github/kosmatov/sidekiq-benchmark.png)](https://codeclimate.com/github/kosmatov/sidekiq-benchmark)
-[![Build Status](https://travis-ci.org/kosmatov/sidekiq-benchmark.png)](https://travis-ci.org/kosmatov/sidekiq-benchmark)
-[![Coverage Status](https://coveralls.io/repos/kosmatov/sidekiq-benchmark/badge.png?branch=master)](https://coveralls.io/r/kosmatov/sidekiq-benchmark)
 
 Adds benchmarking methods to
 [Sidekiq](https://github.com/mperham/sidekiq) workers, keeps metrics and adds tab to Web UI to let you browse them.
