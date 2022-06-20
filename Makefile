@@ -1,3 +1,5 @@
+.PHONY: test
+
 DOCKER_CONSOLE := docker-compose run -w /app$(APP_PATH) --rm console
 PROJECT_NAME ?= $(shell basename $(shell pwd))
 

@@ -1,11 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 
-require 'coveralls'
-Coveralls.wear! do
-  add_filter '/test/'
-end
-
 ENV['RACK_ENV'] = 'test'
 $TESTING = true
 
