@@ -1,5 +1,3 @@
-.PHONY: test
-
 DOCKER_CONSOLE := docker-compose run -w /app$(APP_PATH) --rm console
 PROJECT_NAME ?= $(shell basename $(shell pwd))
 
@@ -18,14 +16,17 @@ build:
 	$(DOCKER_CONSOLE) gem build $(PROJECT_NAME).gemspec
 
 clean:
-	$(DOCKER_CONSOLE) rm *.gem
+	-$(DOCKER_CONSOLE) rm *.gem
 
 test:
 	$(DOCKER_CONSOLE) bundle exec rake test
 
-push:
+push: clean test build
 	$(eval gem_file ?= $(shell find -name $(PROJECT_NAME)\*.gem -print | sort | tail -1))
 	$(DOCKER_CONSOLE) gem push $(gem_file)
+
+signin:
+	$(DOCKER_CONSOLE) gem signin
 
 console:
 	$(DOCKER_CONSOLE)

@@ -18,6 +18,7 @@ services:
       - ./vendor:/app/vendor
       - ~/.pry_history:/root/.pry_history
       - ~/.bash_history:/root/.bash_history
+      - ~/.local/share/gem/credentials:/root/.local/share/gem/credentials
     links:
       - redis:redis
     logging: *logging
