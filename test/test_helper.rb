@@ -8,7 +8,6 @@ require 'bundler/setup'
 require 'rack/test'
 
 require 'sidekiq'
-require 'sidekiq/util'
 require 'sidekiq-benchmark'
 
 require 'delorean'
