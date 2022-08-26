@@ -13,11 +13,9 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
-
-## Requirements
-
-From version 0.5.0 works with Sidekiq 4.2 or newer
+```shell
+bundle
+```
 
 ## Usage
 
