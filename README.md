@@ -69,10 +69,6 @@ end
 
 ![Web UI](https://github.com/kosmatov/sidekiq-benchmark/raw/master/examples/web-ui.png)
 
-### Sample Apps
-
-[Heroku App](http://sidekiq-benchmark.herokuapp.com/benchmarks/generate)
-
 ## Testing sidekiq workers
 
 When you use [Sidekiq::Testing](https://github.com/mperham/sidekiq/wiki/Testing) you
