@@ -43,6 +43,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: bundle install
+        run: bundle install
+      - name: appraisal install
         run: bundle exec appraisal install
       - name: run tests
         run: bundle exec appraisal sidekiq-6 rake test
