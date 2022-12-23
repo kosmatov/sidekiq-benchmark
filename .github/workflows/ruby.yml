@@ -29,6 +29,25 @@ jobs:
         run: bundle exec rake test
         env:
           REDIS_HOST: redis
+  ruby-latest-sidekiq-6:
+    runs-on: ubuntu-latest
+    container: ruby:latest
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: bundle install
+        run: bundle exec appraisal install
+      - name: run tests
+        run: bundle exec appraisal sidekiq-6 rake test
+        env:
+          REDIS_HOST: redis
   ruby-2:
     runs-on: ubuntu-latest
     container: ruby:2

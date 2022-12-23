@@ -86,8 +86,8 @@ module Sidekiq
 
               transaction.hincrby redis_keys[:stats], job_time_key, 1
 
-              transaction.hsetnx redis_keys[:total], "start_time", start_time
-              transaction.hset redis_keys[:total], "finish_time", finish_time
+              transaction.hsetnx redis_keys[:total], "start_time", start_time.to_s
+              transaction.hset redis_keys[:total], "finish_time", finish_time.to_s
 
               transaction.expire redis_keys[:stats], REDIS_KEYS_TTL
               transaction.expire redis_keys[:total], REDIS_KEYS_TTL

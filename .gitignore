@@ -1,4 +1,5 @@
 vendor/
 Gemfile.lock
 coverage/
+gemfiles
 *.gem

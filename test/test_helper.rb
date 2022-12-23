@@ -13,8 +13,15 @@ require 'sidekiq-benchmark'
 require 'delorean'
 require 'pry'
 
-REDIS = Sidekiq::RedisConnection.create url: "redis://#{ENV['REDIS_HOST'] || 'localhost'}/15"
 Bundler.require
+
+Sidekiq.configure_server do |cfg|
+  cfg.redis = {url: "redis://#{ENV['REDIS_HOST'] || 'localhost'}/15"}
+end
+
+Sidekiq.configure_client do |cfg|
+  cfg.redis = {url: "redis://#{ENV['REDIS_HOST'] || 'localhost'}/15"}
+end
 
 module Sidekiq
   module Benchmark
@@ -84,7 +91,6 @@ module Sidekiq
       end
 
       def self.flush_db
-        Sidekiq.redis = REDIS
         Sidekiq.redis do |conn|
           conn.flushdb
         end
