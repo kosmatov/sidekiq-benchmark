@@ -51,9 +51,10 @@ module Sidekiq
         end
 
         app.post "/benchmarks/remove" do
+          type = respond_to?(:url_params) ? url_params("type") : params["type"]
           Sidekiq.redis do |conn|
-            keys = STAT_KEYS.map { |key| "#{REDIS_NAMESPACE}:#{params[:type]}:#{key}" }
-            conn.srem TYPES_KEY, params[:type]
+            keys = STAT_KEYS.map { |key| "#{REDIS_NAMESPACE}:#{type}:#{key}" }
+            conn.srem TYPES_KEY, type
             conn.del keys
           end
 

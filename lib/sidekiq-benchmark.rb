@@ -1,8 +1,14 @@
 require 'sidekiq/web'
 require 'sidekiq-benchmark/web'
 
-Sidekiq::Web.register Sidekiq::Benchmark::Web
-Sidekiq::Web.tabs["Benchmarks"] = "benchmarks"
+if Sidekiq::Web.respond_to?(:configure)
+  Sidekiq::Web.configure do |config|
+    config.register Sidekiq::Benchmark::Web, name: "benchmark", tab: "Benchmarks", index: "benchmarks"
+  end
+else
+  Sidekiq::Web.register Sidekiq::Benchmark::Web
+  Sidekiq::Web.tabs["Benchmarks"] = "benchmarks"
+end
 
 module Sidekiq
   module Benchmark
@@ -14,4 +20,3 @@ module Sidekiq
     autoload :Worker, 'sidekiq-benchmark/worker'
   end
 end
-
