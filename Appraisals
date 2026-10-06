@@ -4,4 +4,5 @@ end
 
 appraise 'sidekiq-6' do
   gem 'sidekiq', '~> 6'
+  gem 'rack', '< 3'
 end
