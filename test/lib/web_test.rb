@@ -8,6 +8,10 @@ module Sidekiq
       describe "Web extention" do
         include Rack::Test::Methods
 
+        it "registers the benchmarks tab" do
+          _(Sidekiq::Web.tabs["Benchmarks"]).must_equal "benchmarks"
+        end
+
         def app
           @app ||= Sidekiq::Web
         end
@@ -15,6 +19,7 @@ module Sidekiq
         before do
           env 'rack.session', { csrf: TOKEN }
           env 'HTTP_X_CSRF_TOKEN', TOKEN
+          env 'HTTP_SEC_FETCH_SITE', 'same-origin'
           Test.flush_db
         end
 
